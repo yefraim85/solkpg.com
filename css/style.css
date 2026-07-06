@@ -440,10 +440,8 @@ h1, h2, h3, h4 {
   border-radius: 50%;
   margin: 0 auto 18px;
   background: linear-gradient(135deg, var(--sage), var(--forest));
-  display: flex; align-items: center; justify-content: center;
-  color: #fff;
-  font-family: var(--font-display);
-  font-size: 1.6rem;
+  object-fit: cover;
+  border: 3px solid var(--sand-dark);
 }
 .team-card h4 { margin-bottom: 2px; font-size: 1.05rem; }
 .team-card .role {
