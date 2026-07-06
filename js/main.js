@@ -11,11 +11,40 @@ onScroll();
 // Mobile nav toggle
 const navToggle = document.getElementById("navToggle");
 const navLinks = document.getElementById("navLinks");
+const navOverlay = document.getElementById("navOverlay");
+const setMenuOpen = (open) => {
+  navLinks.classList.toggle("is-open", open);
+  navToggle.classList.toggle("is-active", open);
+  navOverlay.classList.toggle("is-open", open);
+};
 navToggle.addEventListener("click", () => {
-  navLinks.classList.toggle("is-open");
+  setMenuOpen(!navLinks.classList.contains("is-open"));
 });
+navOverlay.addEventListener("click", () => setMenuOpen(false));
 navLinks.querySelectorAll("a").forEach((link) => {
-  link.addEventListener("click", () => navLinks.classList.remove("is-open"));
+  link.addEventListener("click", () => setMenuOpen(false));
+});
+
+// Smooth scroll to an in-page anchor, including on landing from another page
+const scrollToHash = (hash) => {
+  if (!hash || hash === "#top") return;
+  const target = document.querySelector(hash);
+  if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+};
+if (window.location.hash) {
+  window.requestAnimationFrame(() => scrollToHash(window.location.hash));
+}
+document.querySelectorAll('a[href^="#"], a[href*=".html#"]').forEach((link) => {
+  link.addEventListener("click", (e) => {
+    const [, hash] = link.getAttribute("href").split("#");
+    const samePage = !link.getAttribute("href").includes(".html") ||
+      link.pathname === window.location.pathname;
+    if (samePage && hash) {
+      e.preventDefault();
+      scrollToHash("#" + hash);
+      history.pushState(null, "", "#" + hash);
+    }
+  });
 });
 
 // Scroll reveal
