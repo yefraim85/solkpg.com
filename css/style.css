@@ -22,6 +22,13 @@
 
 html { scroll-behavior: smooth; }
 
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--terracotta);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);
@@ -83,6 +90,18 @@ h1, h2, h3, h4 {
 
 .section-head p { color: var(--ink-soft); font-size: 1.08rem; }
 .section--dark .section-head p { color: var(--sage-light); }
+
+.section-image {
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 48px;
+}
+.section-image img {
+  width: 100%;
+  aspect-ratio: 21/9;
+  object-fit: cover;
+  display: block;
+}
 
 .lede {
   font-size: 1.2rem;
@@ -172,9 +191,18 @@ h1, h2, h3, h4 {
   font-weight: 500;
 }
 
-.nav-links a { color: var(--sand); opacity: 0.85; transition: opacity 0.2s ease; }
+.nav-links a { position: relative; color: var(--sand); opacity: 0.85; transition: opacity 0.2s ease; }
 .nav-links a:hover { opacity: 1; }
 .nav.is-scrolled .nav-links a { color: var(--ink); }
+.nav-links a.is-active { opacity: 1; }
+.nav-links a.is-active::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -6px;
+  height: 2px;
+  background: currentColor;
+}
+.nav-links a.btn.is-active::after { display: none; }
 
 .nav-links .btn { padding: 10px 22px; font-size: 0.88rem; }
 
@@ -474,42 +502,13 @@ h1, h2, h3, h4 {
 .contact {
   padding: 100px 0 60px;
 }
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-}
-.contact-form {
-  display: grid;
-  gap: 16px;
-}
-.contact-form input,
-.contact-form select,
-.contact-form textarea {
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: 10px;
-  border: 1px solid var(--sand-dark);
-  background: #fff;
-  font-family: var(--font-body);
-  font-size: 0.95rem;
-  color: var(--ink);
-}
-.contact-form textarea { resize: vertical; min-height: 110px; }
-.contact-form label {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--ink-soft);
-  margin-bottom: 4px;
-  display: block;
-}
-.form-note {
-  font-size: 0.82rem;
-  color: var(--ink-soft);
-  margin-top: 4px;
-}
 
 .contact-info { display: grid; gap: 26px; align-content: start; }
+.contact-info--centered {
+  justify-items: center;
+  text-align: center;
+  gap: 36px;
+}
 .contact-info-item h4 { font-size: 1rem; margin-bottom: 6px; }
 .contact-info-item p, .contact-info-item a { color: var(--ink-soft); font-size: 0.95rem; }
 .contact-info-item a:hover { color: var(--terracotta-dark); }
@@ -539,25 +538,6 @@ footer .container {
   gap: 12px;
 }
 footer a:hover { color: var(--cream); }
-
-/* ---------- Form success toast ---------- */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--forest-dark);
-  color: var(--cream);
-  padding: 16px 22px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-  font-size: 0.92rem;
-  transform: translateY(20px);
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s ease;
-  z-index: 200;
-}
-.toast.is-visible { transform: translateY(0); opacity: 1; }
 
 /* ---------- Retreats page ---------- */
 .retreat-hero {
@@ -699,12 +679,12 @@ footer a:hover { color: var(--cream); }
   .split { grid-template-columns: 1fr; gap: 36px; }
   .split.split--reverse .split-media { order: 0; }
   .split-media img { aspect-ratio: 16/10; }
+  .section-image img { aspect-ratio: 16/10; }
   .cards { grid-template-columns: repeat(2, 1fr); }
   .pillars { grid-template-columns: repeat(3, 1fr); }
   .team-grid { grid-template-columns: repeat(2, 1fr); }
   .feature-row { grid-template-columns: repeat(2, 1fr); }
   .stats .container { grid-template-columns: repeat(2, 1fr); }
-  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
   .retreat-features { grid-template-columns: 1fr; }
   .nutshell-grid { grid-template-columns: repeat(2, 1fr); }
 }

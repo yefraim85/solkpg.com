@@ -25,17 +25,21 @@ navLinks.querySelectorAll("a").forEach((link) => {
   link.addEventListener("click", () => setMenuOpen(false));
 });
 
-// Smooth scroll to an in-page anchor, including on landing from another page
+// Smooth scroll to an in-page anchor, including on landing from another page.
+// Skipped on mobile — the JS-driven scroll fought with the fixed nav/slide-out
+// menu there, so mobile falls back to native (CSS scroll-behavior) jumps.
+const isMobileNav = () => window.matchMedia("(max-width: 720px)").matches;
 const scrollToHash = (hash) => {
   if (!hash || hash === "#top") return;
   const target = document.querySelector(hash);
   if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
 };
-if (window.location.hash) {
+if (window.location.hash && !isMobileNav()) {
   window.requestAnimationFrame(() => scrollToHash(window.location.hash));
 }
 document.querySelectorAll('a[href^="#"], a[href*=".html#"]').forEach((link) => {
   link.addEventListener("click", (e) => {
+    if (isMobileNav()) return;
     const [, hash] = link.getAttribute("href").split("#");
     const samePage = !link.getAttribute("href").includes(".html") ||
       link.pathname === window.location.pathname;
@@ -46,6 +50,26 @@ document.querySelectorAll('a[href^="#"], a[href*=".html#"]').forEach((link) => {
     }
   });
 });
+
+// Scroll-spy: highlight the nav link for the section currently in view
+const spySections = ["vision", "experience", "facility", "team", "contact"]
+  .map((id) => document.getElementById(id))
+  .filter(Boolean);
+if (spySections.length) {
+  const spyObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.id;
+        document.querySelectorAll(".nav-links a").forEach((a) => {
+          a.classList.toggle("is-active", a.getAttribute("href") === "#" + id);
+        });
+      });
+    },
+    { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
+  );
+  spySections.forEach((sec) => spyObserver.observe(sec));
+}
 
 // Scroll reveal
 const revealEls = document.querySelectorAll(".reveal");
@@ -61,13 +85,3 @@ const revealObserver = new IntersectionObserver(
   { threshold: 0.15 }
 );
 revealEls.forEach((el) => revealObserver.observe(el));
-
-// Contact form (placeholder submit handler)
-const form = document.getElementById("contactForm");
-const toast = document.getElementById("toast");
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  toast.classList.add("is-visible");
-  form.reset();
-  setTimeout(() => toast.classList.remove("is-visible"), 3200);
-});
