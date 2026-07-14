@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Schedule &mdash; School of Life | Koh Phangan</title>
+<meta name="description" content="Upcoming SOL events, ceremonies, and community gatherings in Koh Phangan." />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="container">
+    <a href="index.html#top" class="brand"><img src="images/logo/logo-full.png" alt="School of Life" /></a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html#vision">Vision</a>
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#facility">The Facility</a>
+      <a href="index.html#team">Team</a>
+      <a href="retreats.html">Get a Taste</a>
+      <a href="schedule.html">Schedule</a>
+      <a href="index.html#contact" class="btn btn--primary">Get in Touch</a>
+    </div>
+  </div>
+</nav>
+<div class="nav-overlay" id="navOverlay"></div>
+
+<header class="page-header">
+  <div class="container">
+    <span class="eyebrow">SOL &amp; Community</span>
+    <h1>Schedule</h1>
+    <p class="lede">Upcoming events, ceremonies, and community gatherings on the island.</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <div class="schedule-calendar reveal">
+      <div class="schedule-nav">
+        <button type="button" id="schedulePrev" aria-label="Previous month">&larr;</button>
+        <h3 id="scheduleMonthLabel">&nbsp;</h3>
+        <button type="button" id="scheduleNext" aria-label="Next month">&rarr;</button>
+      </div>
+      <div class="schedule-weekdays">
+        <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+      </div>
+      <div class="schedule-grid" id="scheduleGrid"></div>
+    </div>
+    <p class="schedule-note">Times shown in your local timezone. Tap an event for details.</p>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <span class="eyebrow" style="color:var(--sage-light)">Not Sure Where to Start?</span>
+    <h2>Get a taste first.</h2>
+    <p>Browse what's coming up, or read more about what a School of Life retreat actually looks like.</p>
+    <div class="cta-actions">
+      <a href="retreats.html" class="btn btn--light">Explore Retreats</a>
+      <a href="index.html#contact" class="btn btn--ghost">Ask a Question</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <span>&copy; <span id="year"></span> School of Life. All rights reserved.</span>
+    <span>Koh Phangan, Thailand</span>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script src="js/schedule.js"></script>
+</body>
+</html>
