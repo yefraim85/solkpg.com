@@ -65,6 +65,8 @@ h1, h2, h3, h4 {
   font-weight: 600;
   margin-bottom: 14px;
 }
+.eyebrow a { color: inherit; text-decoration: underline; text-underline-offset: 3px; opacity: 0.85; }
+.eyebrow a:hover { opacity: 1; }
 
 .section {
   padding: 110px 0;
@@ -309,7 +311,17 @@ h1, h2, h3, h4 {
   color: var(--cream);
   padding: 46px 0;
 }
-.stats .container {
+.stats-label {
+  display: block;
+  text-align: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--sage-light);
+  margin-bottom: 20px;
+}
+.stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
@@ -537,6 +549,7 @@ footer .container {
   flex-wrap: wrap;
   gap: 12px;
 }
+footer a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 footer a:hover { color: var(--cream); }
 
 /* ---------- Generic page header (non-hero pages) ---------- */
@@ -649,6 +662,7 @@ footer a:hover { color: var(--cream); }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .schedule-note { text-align: center; color: var(--ink-soft); font-size: 0.9rem; margin-top: 24px; }
+.schedule-note a { color: var(--terracotta-dark); text-decoration: underline; text-underline-offset: 2px; }
 
 /* ---------- Retreats page ---------- */
 .retreat-hero {
@@ -795,7 +809,7 @@ footer a:hover { color: var(--cream); }
   .pillars { grid-template-columns: repeat(3, 1fr); }
   .team-grid { grid-template-columns: repeat(2, 1fr); }
   .feature-row { grid-template-columns: repeat(2, 1fr); }
-  .stats .container { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .retreat-features { grid-template-columns: 1fr; }
   .nutshell-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -837,7 +851,7 @@ footer a:hover { color: var(--cream); }
   .cards { grid-template-columns: 1fr 1fr; }
   .feature-row { grid-template-columns: 1fr; }
   .team-grid { grid-template-columns: 1fr 1fr; }
-  .stats .container { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
   footer .container { flex-direction: column; text-align: center; }
   .retreat-card { padding: 28px; }
   .retreat-schedule { flex-direction: column; align-items: flex-start; }
