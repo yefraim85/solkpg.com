@@ -52,7 +52,7 @@ document.querySelectorAll('a[href^="#"], a[href*=".html#"]').forEach((link) => {
 });
 
 // Scroll-spy: highlight the nav link for the section currently in view
-const spySections = ["schedule", "vision", "experience", "facility", "team", "contact"]
+const spySections = ["vision", "experience", "facility", "team", "contact"]
   .map((id) => document.getElementById(id))
   .filter(Boolean);
 if (spySections.length) {

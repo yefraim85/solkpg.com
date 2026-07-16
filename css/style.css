@@ -327,6 +327,11 @@ h1, h2, h3, h4 {
   gap: 24px;
   text-align: center;
 }
+.stats-grid--pair {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 460px;
+  margin: 0 auto;
+}
 .stat b {
   font-family: var(--font-display);
   display: block;
@@ -845,7 +850,6 @@ footer a:hover { color: var(--cream); }
   .nav-links.is-open a:nth-child(4) { transition-delay: 0.21s; }
   .nav-links.is-open a:nth-child(5) { transition-delay: 0.26s; }
   .nav-links.is-open a:nth-child(6) { transition-delay: 0.31s; }
-  .nav-links.is-open a:nth-child(7) { transition-delay: 0.36s; }
   .nav-toggle { display: block; z-index: 110; }
   .pillars { grid-template-columns: repeat(2, 1fr); }
   .cards { grid-template-columns: 1fr 1fr; }
