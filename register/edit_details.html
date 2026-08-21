@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Edit Your Details &mdash; School of Life</title>
+<meta name="description" content="Update your registration details for a School of Life retreat in Koh Phangan, Thailand." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="card">
+    <div id="formWrap">
+      <h1>Edit Your Details</h1>
+      <p class="subtitle">Sign in with Google to edit your details.</p>
+
+      <div class="gate" id="signInGate">
+        <button class="google-btn" id="signInButton" type="button">
+          <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6.5 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6.5 29.6 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.4-2.1 14.2-5.6l-6.5-5.5C29.6 34.7 26.9 36 24 36c-5.3 0-9.7-3.1-11.3-7.5l-6.6 5.1C9.6 39.6 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.5 5.5C39.9 37.4 44 31.4 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>
+          Sign in with Google
+        </button>
+      </div>
+
+      <fieldset id="formFieldset" class="hidden" disabled>
+        <div class="signed-in-row hidden" id="signedInRow">
+          <span class="email" id="signedInEmail"></span>
+          <button type="button" id="signOutButton">Sign out</button>
+        </div>
+
+        <form id="detailsForm">
+          <h2 class="section">Personal details</h2>
+          <label for="firstName">First name *</label>
+          <input id="firstName" type="text" required autocomplete="given-name" />
+
+          <label for="lastName">Last name *</label>
+          <input id="lastName" type="text" required autocomplete="family-name" />
+
+          <label for="middleName">Middle name <span class="optional">(optional)</span></label>
+          <input id="middleName" type="text" />
+
+          <label for="nickname">Nickname <span class="optional">(optional)</span></label>
+          <input id="nickname" type="text" />
+
+          <label for="nationality">Nationality *</label>
+          <select id="nationality" required>
+            <option value="" disabled selected>Select nationality…</option>
+          </select>
+
+          <label for="birthDate">Birth date *</label>
+          <input id="birthDate" type="date" required />
+
+          <label for="dietaryNotes">Dietary notes <span class="optional">(leave empty if none)</span></label>
+          <textarea id="dietaryNotes" rows="2"></textarea>
+
+          <h2 class="section">Contact details</h2>
+          <label for="whatsapp">WhatsApp number *</label>
+          <input id="whatsapp" type="tel" required autocomplete="tel" placeholder="+66 xx xxx xxxx" />
+
+          <label for="phone">Phone number *</label>
+          <input id="phone" type="tel" required autocomplete="tel" placeholder="+66 xx xxx xxxx" />
+          <div class="checkbox-row">
+            <input id="samePhone" type="checkbox" />
+            <label for="samePhone" style="margin:0;font-weight:400;">Same as WhatsApp number</label>
+          </div>
+
+          <h2 class="section">Emergency contact details</h2>
+          <label for="emergencyName">Name *</label>
+          <input id="emergencyName" type="text" required />
+
+          <label for="emergencyRelation">Relation *</label>
+          <select id="emergencyRelation" required>
+            <option value="" disabled selected>Select…</option>
+          </select>
+
+          <label for="emergencyPhone">Number *</label>
+          <input id="emergencyPhone" type="tel" required placeholder="+66 xx xxx xxxx" />
+
+          <button class="primary" type="submit" id="submitButton">Save</button>
+          <div class="error-banner" id="errorBanner"></div>
+        </form>
+      </fieldset>
+    </div>
+
+    <div class="success" id="success">
+      <div class="icon">&#10003;</div>
+      <h2 class="title">Saved!</h2>
+      <p>Your details have been saved.</p>
+      <p style="margin-top:16px;"><a class="link-btn" href="index.html">Back to registration</a></p>
+    </div>
+  </div>
+
+<script type="module">
+  import {
+    createSupabaseClient, NATIONALITIES, EMERGENCY_RELATIONS, populateSelect, wireAuthGate, wireSamePhoneCheckbox,
+  } from './shared.js';
+
+  const supabase = createSupabaseClient();
+
+  const els = {
+    signInGate: document.getElementById('signInGate'),
+    signInButton: document.getElementById('signInButton'),
+    signOutButton: document.getElementById('signOutButton'),
+    signedInRow: document.getElementById('signedInRow'),
+    signedInEmail: document.getElementById('signedInEmail'),
+    formFieldset: document.getElementById('formFieldset'),
+    nationality: document.getElementById('nationality'),
+    emergencyRelation: document.getElementById('emergencyRelation'),
+    phone: document.getElementById('phone'),
+    whatsapp: document.getElementById('whatsapp'),
+    samePhone: document.getElementById('samePhone'),
+    form: document.getElementById('detailsForm'),
+    submitButton: document.getElementById('submitButton'),
+    errorBanner: document.getElementById('errorBanner'),
+    formWrap: document.getElementById('formWrap'),
+    success: document.getElementById('success'),
+  };
+
+  populateSelect(els.nationality, NATIONALITIES);
+  populateSelect(els.emergencyRelation, EMERGENCY_RELATIONS);
+
+  const syncSamePhone = wireSamePhoneCheckbox(els);
+
+  function showError(message) {
+    els.errorBanner.textContent = message;
+    els.errorBanner.classList.add('visible');
+  }
+  function clearError() {
+    els.errorBanner.classList.remove('visible');
+    els.errorBanner.textContent = '';
+  }
+
+  function applyExistingDetails(d) {
+    document.getElementById('firstName').value = d.first_name || '';
+    document.getElementById('lastName').value = d.last_name || '';
+    document.getElementById('middleName').value = d.middle_name || '';
+    document.getElementById('nickname').value = d.nickname || '';
+    els.nationality.value = d.nationality || '';
+    document.getElementById('birthDate').value = d.birth_date || '';
+    els.whatsapp.value = d.whatsapp || '';
+    els.phone.value = d.mobile_phone || '';
+    document.getElementById('dietaryNotes').value = d.dietary_notes || '';
+    document.getElementById('emergencyName').value = d.emergency_contact_name || '';
+    els.emergencyRelation.value = d.emergency_contact_relation || '';
+    document.getElementById('emergencyPhone').value = d.emergency_contact_whatsapp || '';
+  }
+
+  async function onSignedIn() {
+    const { data, error } = await supabase.rpc('public_customer_details');
+    const existing = !error && Array.isArray(data) && data.length > 0 ? data[0] : null;
+    if (existing) applyExistingDetails(existing);
+    syncSamePhone();
+  }
+
+  const initAuthGate = wireAuthGate(supabase, els, { onSignedIn });
+
+  els.form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    clearError();
+
+    const val = (id) => document.getElementById(id).value.trim();
+
+    if (!val('firstName') || !val('lastName') || !val('nationality') || !val('birthDate') ||
+        !val('whatsapp') || !val('phone') || !val('emergencyName') || !val('emergencyRelation') || !val('emergencyPhone')) {
+      showError('Please fill in all required fields.');
+      return;
+    }
+
+    els.submitButton.disabled = true;
+    els.submitButton.textContent = 'Saving…';
+
+    const { error } = await supabase.rpc('public_save_customer_details', {
+      p_first_name: val('firstName'),
+      p_last_name: val('lastName'),
+      p_whatsapp: val('whatsapp'),
+      p_mobile_phone: val('phone'),
+      p_nationality: val('nationality'),
+      p_birth_date: val('birthDate'),
+      p_emergency_contact_name: val('emergencyName'),
+      p_emergency_contact_relation: val('emergencyRelation'),
+      p_emergency_contact_whatsapp: val('emergencyPhone'),
+      p_middle_name: val('middleName') || null,
+      p_nickname: val('nickname') || null,
+      p_dietary_notes: val('dietaryNotes') || null,
+    });
+
+    if (error) {
+      showError(error.message || 'Something went wrong. Please try again.');
+      els.submitButton.disabled = false;
+      els.submitButton.textContent = 'Save';
+      return;
+    }
+
+    els.formWrap.classList.add('hidden');
+    els.success.classList.add('visible');
+  });
+
+  await initAuthGate();
+</script>
+</body>
+</html>
