@@ -73,6 +73,9 @@
             <div id="section-contact">
               <h2 class="section">Contact details</h2>
 
+              <label for="customerEmail">Email *</label>
+              <input id="customerEmail" name="email" type="email" required autocomplete="email" />
+
               <div id="field-whatsapp">
                 <label for="whatsapp">WhatsApp number *</label>
                 <input id="whatsapp" type="tel" required autocomplete="tel" placeholder="+66 xx xxx xxxx" />
@@ -156,6 +159,7 @@
     formFieldset: document.getElementById('formFieldset'),
     retreat: document.getElementById('retreat'),
     retreatMeta: document.getElementById('retreatMeta'),
+    customerEmail: document.getElementById('customerEmail'),
     nationality: document.getElementById('nationality'),
     emergencyRelation: document.getElementById('emergencyRelation'),
     phone: document.getElementById('phone'),
@@ -244,9 +248,10 @@
   // Shows only the required fields still missing from this signed-in visitor's saved details (all of them, for
   // someone with no record at all) -- everything already on file stays hidden here and is only reachable via the
   // separate "Edit your details" page, so this page stays focused on retreat registration.
-  async function onSignedIn() {
+  async function onSignedIn(session) {
     const { data, error } = await supabase.rpc('public_customer_details');
     existingDetails = !error && Array.isArray(data) && data.length > 0 ? data[0] : null;
+    els.customerEmail.value = session.user.email || '';
 
     if (existingDetails) {
       els.welcomeBackName.textContent = [existingDetails.first_name, existingDetails.last_name].filter(Boolean).join(' ');
@@ -255,21 +260,22 @@
       els.welcomeBack.classList.add('hidden');
     }
 
-    let anyMissing = false;
     const sectionsWithMissing = new Set();
     for (const field of REQUIRED_FIELDS) {
       const value = existingDetails ? existingDetails[field.key] : null;
       const isMissing = !value || !String(value).trim();
       document.getElementById(`field-${field.id}`).classList.toggle('hidden', !isMissing);
       if (isMissing) {
-        anyMissing = true;
         sectionsWithMissing.add(field.section);
       }
     }
-    for (const sectionId of ['section-personal', 'section-contact', 'section-emergency']) {
+    for (const sectionId of ['section-personal', 'section-emergency']) {
       document.getElementById(sectionId).classList.toggle('hidden', !sectionsWithMissing.has(sectionId));
     }
-    els.missingFieldsSection.classList.toggle('hidden', !anyMissing);
+    // Contact details always stays visible because the registration email can be overridden even when every
+    // other customer detail is already on file.
+    document.getElementById('section-contact').classList.remove('hidden');
+    els.missingFieldsSection.classList.remove('hidden');
   }
 
   const initAuthGate = wireAuthGate(supabase, els, { onSignedIn });
@@ -281,6 +287,12 @@
     const retreatId = els.retreat.value;
     if (!retreatId) {
       showError('Please select a retreat.');
+      return;
+    }
+
+    const customerEmail = els.customerEmail.value.trim();
+    if (!customerEmail) {
+      showError('Please enter your email.');
       return;
     }
 
@@ -313,6 +325,7 @@
       p_emergency_contact_name: values.emergencyName,
       p_emergency_contact_relation: values.emergencyRelation,
       p_emergency_contact_whatsapp: values.emergencyPhone,
+      p_email: customerEmail,
       p_middle_name: existingDetails?.middle_name || null,
       p_nickname: existingDetails?.nickname || null,
       p_dietary_notes: existingDetails?.dietary_notes || null,
