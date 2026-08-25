@@ -68,6 +68,9 @@
                 <label for="birthDate">Birth date *</label>
                 <input id="birthDate" type="date" required />
               </div>
+
+              <label for="dietaryPreferences">Dietary Preferences <span class="optional">(leave empty if none)</span></label>
+              <textarea id="dietaryPreferences" rows="2"></textarea>
             </div>
 
             <div id="section-contact">
@@ -161,6 +164,7 @@
     retreatMeta: document.getElementById('retreatMeta'),
     customerEmail: document.getElementById('customerEmail'),
     nationality: document.getElementById('nationality'),
+    dietaryPreferences: document.getElementById('dietaryPreferences'),
     emergencyRelation: document.getElementById('emergencyRelation'),
     phone: document.getElementById('phone'),
     whatsapp: document.getElementById('whatsapp'),
@@ -252,6 +256,7 @@
     const { data, error } = await supabase.rpc('public_customer_details');
     existingDetails = !error && Array.isArray(data) && data.length > 0 ? data[0] : null;
     els.customerEmail.value = session.user.email || '';
+    els.dietaryPreferences.value = existingDetails?.dietary_notes || '';
 
     if (existingDetails) {
       els.welcomeBackName.textContent = [existingDetails.first_name, existingDetails.last_name].filter(Boolean).join(' ');
@@ -269,11 +274,12 @@
         sectionsWithMissing.add(field.section);
       }
     }
-    for (const sectionId of ['section-personal', 'section-emergency']) {
+    for (const sectionId of ['section-emergency']) {
       document.getElementById(sectionId).classList.toggle('hidden', !sectionsWithMissing.has(sectionId));
     }
-    // Contact details always stays visible because the registration email can be overridden even when every
-    // other customer detail is already on file.
+    // Personal and contact details always stay visible because dietary preferences and registration email can be
+    // changed even when every required customer detail is already on file.
+    document.getElementById('section-personal').classList.remove('hidden');
     document.getElementById('section-contact').classList.remove('hidden');
     els.missingFieldsSection.classList.remove('hidden');
   }
@@ -328,7 +334,7 @@
       p_email: customerEmail,
       p_middle_name: existingDetails?.middle_name || null,
       p_nickname: existingDetails?.nickname || null,
-      p_dietary_notes: existingDetails?.dietary_notes || null,
+      p_dietary_notes: els.dietaryPreferences.value.trim() || null,
     });
 
     if (saveError) {
