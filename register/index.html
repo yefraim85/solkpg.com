@@ -126,7 +126,9 @@
             </div>
           </div>
 
-          <p style="margin-top:20px;"><a class="link-btn" href="edit_details.html">Edit your details</a></p>
+          <p id="editDetailsLink" class="hidden" style="margin-top:20px;">
+            <a class="link-btn" href="edit_details.html">Edit your details</a>
+          </p>
 
           <button class="primary" type="submit" id="submitButton">Register</button>
           <div class="error-banner" id="errorBanner"></div>
@@ -190,6 +192,7 @@
     welcomeBack: document.getElementById('welcomeBack'),
     welcomeBackName: document.getElementById('welcomeBackName'),
     missingFieldsSection: document.getElementById('missingFieldsSection'),
+    editDetailsLink: document.getElementById('editDetailsLink'),
   };
 
   populateSelect(els.nationality, NATIONALITIES);
@@ -275,8 +278,10 @@
     if (existingDetails) {
       els.welcomeBackName.textContent = [existingDetails.first_name, existingDetails.last_name].filter(Boolean).join(' ');
       els.welcomeBack.classList.remove('hidden');
+      els.editDetailsLink.classList.remove('hidden');
     } else {
       els.welcomeBack.classList.add('hidden');
+      els.editDetailsLink.classList.add('hidden');
     }
 
     const sectionsWithMissing = new Set();
