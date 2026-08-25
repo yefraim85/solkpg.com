@@ -54,6 +54,10 @@ export function formatPrice(price) {
   return isNaN(n) ? '' : `฿ ${n.toLocaleString()}`;
 }
 
+export function normalizePhoneNumber(value) {
+  return value.trim().replace(/\s+/g, '');
+}
+
 // Keeps the "Same as WhatsApp number" checkbox and the phone field in sync both ways: checking it mirrors
 // WhatsApp into phone and locks phone; typing a phone value that happens to match WhatsApp checks it (and locks
 // it) the same way manually checking the box would. Returns the sync function so a caller can also run it once

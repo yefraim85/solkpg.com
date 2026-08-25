@@ -146,7 +146,7 @@
 <script type="module">
   import {
     SUPABASE_URL, SUPABASE_ANON_KEY, createSupabaseClient, NATIONALITIES, EMERGENCY_RELATIONS,
-    populateSelect, formatDate, wireAuthGate, wireSamePhoneCheckbox,
+    populateSelect, formatDate, normalizePhoneNumber, wireAuthGate, wireSamePhoneCheckbox,
   } from './shared.js';
 
   const supabase = createSupabaseClient();
@@ -164,6 +164,7 @@
     { id: 'emergencyRelation', key: 'emergency_contact_relation', section: 'section-emergency' },
     { id: 'emergencyPhone', key: 'emergency_contact_whatsapp', section: 'section-emergency' },
   ];
+  const PHONE_FIELD_IDS = new Set(['whatsapp', 'phone', 'emergencyPhone']);
 
   const els = {
     signInGate: document.getElementById('signInGate'),
@@ -326,8 +327,10 @@
     // whatever the visitor just typed.
     const fieldValue = (field) => {
       const wrap = document.getElementById(`field-${field.id}`);
-      if (!wrap.classList.contains('hidden')) return document.getElementById(field.id).value.trim();
-      return existingDetails && existingDetails[field.key] ? String(existingDetails[field.key]) : '';
+      const value = !wrap.classList.contains('hidden')
+        ? document.getElementById(field.id).value
+        : existingDetails && existingDetails[field.key] ? String(existingDetails[field.key]) : '';
+      return PHONE_FIELD_IDS.has(field.id) ? normalizePhoneNumber(value) : value.trim();
     };
 
     const values = {};

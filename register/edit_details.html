@@ -94,7 +94,8 @@
 
 <script type="module">
   import {
-    createSupabaseClient, NATIONALITIES, EMERGENCY_RELATIONS, populateSelect, wireAuthGate, wireSamePhoneCheckbox,
+    createSupabaseClient, NATIONALITIES, EMERGENCY_RELATIONS, normalizePhoneNumber, populateSelect, wireAuthGate,
+    wireSamePhoneCheckbox,
   } from './shared.js';
 
   const supabase = createSupabaseClient();
@@ -174,13 +175,13 @@
     const { error } = await supabase.rpc('public_save_customer_details', {
       p_first_name: val('firstName'),
       p_last_name: val('lastName'),
-      p_whatsapp: val('whatsapp'),
-      p_mobile_phone: val('phone'),
+      p_whatsapp: normalizePhoneNumber(val('whatsapp')),
+      p_mobile_phone: normalizePhoneNumber(val('phone')),
       p_nationality: val('nationality'),
       p_birth_date: val('birthDate'),
       p_emergency_contact_name: val('emergencyName'),
       p_emergency_contact_relation: val('emergencyRelation'),
-      p_emergency_contact_whatsapp: val('emergencyPhone'),
+      p_emergency_contact_whatsapp: normalizePhoneNumber(val('emergencyPhone')),
       p_middle_name: val('middleName') || null,
       p_nickname: val('nickname') || null,
       p_dietary_notes: val('dietaryNotes') || null,
