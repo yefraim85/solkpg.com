@@ -44,7 +44,7 @@
           </div>
 
           <div id="missingFieldsSection">
-            <div id="section-personal">
+            <div id="section-name">
               <h2 class="section">Name</h2>
 
               <div id="field-firstName">
@@ -60,20 +60,8 @@
                 <input id="lastName" type="text" required autocomplete="family-name" />
               </div>
 
-              <div id="field-nationality">
-                <label for="nationality">Nationality *</label>
-                <select id="nationality" required>
-                  <option value="" disabled selected>Select nationality…</option>
-                </select>
-              </div>
-
-              <div id="field-birthDate">
-                <label for="birthDate">Birth date *</label>
-                <input id="birthDate" type="date" required />
-              </div>
-
-              <label for="dietaryPreferences">Dietary Preferences <span class="optional">(leave empty if none)</span></label>
-              <textarea id="dietaryPreferences" rows="2"></textarea>
+              <label for="nickname">Nickname <span class="optional">(optional)</span></label>
+              <input id="nickname" type="text" autocomplete="nickname" />
             </div>
 
             <div id="section-contact">
@@ -95,6 +83,25 @@
                   <label for="samePhone" style="margin:0;font-weight:400;">Same as WhatsApp number</label>
                 </div>
               </div>
+            </div>
+
+            <div id="section-personal">
+              <h2 class="section">Personal details</h2>
+
+              <div id="field-nationality">
+                <label for="nationality">Nationality *</label>
+                <select id="nationality" required>
+                  <option value="" disabled selected>Select nationality…</option>
+                </select>
+              </div>
+
+              <div id="field-birthDate">
+                <label for="birthDate">Birth date *</label>
+                <input id="birthDate" type="date" required />
+              </div>
+
+              <label for="dietaryPreferences">Dietary Preferences <span class="optional">(leave empty if none)</span></label>
+              <textarea id="dietaryPreferences" rows="2"></textarea>
             </div>
 
             <div id="section-emergency">
@@ -145,8 +152,8 @@
   // Each entry maps a form field to its column in public_customer_details()'s response, so a field already on
   // file can stay hidden while its saved value is still sent through unchanged on submit.
   const REQUIRED_FIELDS = [
-    { id: 'firstName', key: 'first_name', section: 'section-personal' },
-    { id: 'lastName', key: 'last_name', section: 'section-personal' },
+    { id: 'firstName', key: 'first_name', section: 'section-name' },
+    { id: 'lastName', key: 'last_name', section: 'section-name' },
     { id: 'nationality', key: 'nationality', section: 'section-personal' },
     { id: 'birthDate', key: 'birth_date', section: 'section-personal' },
     { id: 'whatsapp', key: 'whatsapp', section: 'section-contact' },
@@ -167,6 +174,7 @@
     retreatMeta: document.getElementById('retreatMeta'),
     customerEmail: document.getElementById('customerEmail'),
     middleName: document.getElementById('middleName'),
+    nickname: document.getElementById('nickname'),
     nationality: document.getElementById('nationality'),
     dietaryPreferences: document.getElementById('dietaryPreferences'),
     emergencyRelation: document.getElementById('emergencyRelation'),
@@ -261,6 +269,7 @@
     existingDetails = !error && Array.isArray(data) && data.length > 0 ? data[0] : null;
     els.customerEmail.value = session.user.email || '';
     els.middleName.value = existingDetails?.middle_name || '';
+    els.nickname.value = existingDetails?.nickname || '';
     els.dietaryPreferences.value = existingDetails?.dietary_notes || '';
 
     if (existingDetails) {
@@ -282,8 +291,9 @@
     for (const sectionId of ['section-emergency']) {
       document.getElementById(sectionId).classList.toggle('hidden', !sectionsWithMissing.has(sectionId));
     }
-    // Personal and contact details always stay visible because dietary preferences and registration email can be
-    // changed even when every required customer detail is already on file.
+    // These sections contain optional or editable fields, so they stay visible even when all required customer
+    // details are already on file.
+    document.getElementById('section-name').classList.remove('hidden');
     document.getElementById('section-personal').classList.remove('hidden');
     document.getElementById('section-contact').classList.remove('hidden');
     els.missingFieldsSection.classList.remove('hidden');
@@ -338,7 +348,7 @@
       p_emergency_contact_whatsapp: values.emergencyPhone,
       p_email: customerEmail,
       p_middle_name: els.middleName.value.trim() || null,
-      p_nickname: existingDetails?.nickname || null,
+      p_nickname: els.nickname.value.trim() || null,
       p_dietary_notes: els.dietaryPreferences.value.trim() || null,
     });
 
