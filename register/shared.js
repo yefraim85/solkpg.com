@@ -60,6 +60,21 @@ export function normalizePhoneNumber(value) {
   return trimmed.startsWith('+') ? `+${digits}` : digits;
 }
 
+export async function customerDetailsSaveErrorMessage(supabase, error, whatsapp) {
+  const isDuplicateWhatsapp = error?.code === '23505' && error.message?.includes('uq_party_whatsapp');
+  if (!isDuplicateWhatsapp) return error?.message || 'Something went wrong. Please try again.';
+
+  const { data } = await supabase
+    .from('v_customer')
+    .select('first_name,middle_name,last_name')
+    .eq('whatsapp', whatsapp)
+    .maybeSingle();
+  const name = data
+    ? [data.first_name, data.middle_name, data.last_name].filter(Boolean).join(' ')
+    : '';
+  return `A customer with WhatsApp number ${whatsapp} already exists${name ? ` (name: ${name})` : ''}.`;
+}
+
 // Keeps the "Same as WhatsApp number" checkbox and the phone field in sync both ways: checking it mirrors
 // WhatsApp into phone and locks phone; typing a phone value that happens to match WhatsApp checks it (and locks
 // it) the same way manually checking the box would. Returns the sync function so a caller can also run it once

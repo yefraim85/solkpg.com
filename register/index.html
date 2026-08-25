@@ -146,7 +146,8 @@
 <script type="module">
   import {
     SUPABASE_URL, SUPABASE_ANON_KEY, createSupabaseClient, NATIONALITIES, EMERGENCY_RELATIONS,
-    populateSelect, formatDate, normalizePhoneNumber, wireAuthGate, wireSamePhoneCheckbox,
+    customerDetailsSaveErrorMessage, populateSelect, formatDate, normalizePhoneNumber, wireAuthGate,
+    wireSamePhoneCheckbox,
   } from './shared.js';
 
   const supabase = createSupabaseClient();
@@ -360,7 +361,7 @@
     });
 
     if (saveError) {
-      showError(saveError.message || 'Something went wrong. Please try again.');
+      showError(await customerDetailsSaveErrorMessage(supabase, saveError, values.whatsapp));
       els.submitButton.disabled = false;
       els.submitButton.textContent = 'Register';
       return;

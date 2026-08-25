@@ -94,8 +94,8 @@
 
 <script type="module">
   import {
-    createSupabaseClient, NATIONALITIES, EMERGENCY_RELATIONS, normalizePhoneNumber, populateSelect, wireAuthGate,
-    wireSamePhoneCheckbox,
+    createSupabaseClient, NATIONALITIES, EMERGENCY_RELATIONS, customerDetailsSaveErrorMessage,
+    normalizePhoneNumber, populateSelect, wireAuthGate, wireSamePhoneCheckbox,
   } from './shared.js';
 
   const supabase = createSupabaseClient();
@@ -172,11 +172,14 @@
     els.submitButton.disabled = true;
     els.submitButton.textContent = 'Saving…';
 
+    const whatsapp = normalizePhoneNumber(val('whatsapp'));
+    const phone = normalizePhoneNumber(val('phone'));
+
     const { error } = await supabase.rpc('public_save_customer_details', {
       p_first_name: val('firstName'),
       p_last_name: val('lastName'),
-      p_whatsapp: normalizePhoneNumber(val('whatsapp')),
-      p_mobile_phone: normalizePhoneNumber(val('phone')),
+      p_whatsapp: whatsapp,
+      p_mobile_phone: phone,
       p_nationality: val('nationality'),
       p_birth_date: val('birthDate'),
       p_emergency_contact_name: val('emergencyName'),
@@ -188,7 +191,7 @@
     });
 
     if (error) {
-      showError(error.message || 'Something went wrong. Please try again.');
+      showError(await customerDetailsSaveErrorMessage(supabase, error, whatsapp));
       els.submitButton.disabled = false;
       els.submitButton.textContent = 'Save';
       return;
