@@ -341,7 +341,7 @@
     els.submitButton.disabled = true;
     els.submitButton.textContent = 'Registering…';
 
-    const { error: saveError } = await supabase.rpc('public_save_customer_details', {
+    const { data: partyId, error: saveError } = await supabase.rpc('public_save_customer_details', {
       p_first_name: values.firstName,
       p_last_name: values.lastName,
       p_whatsapp: values.whatsapp,
@@ -351,7 +351,6 @@
       p_emergency_contact_name: values.emergencyName,
       p_emergency_contact_relation: values.emergencyRelation,
       p_emergency_contact_whatsapp: values.emergencyPhone,
-      p_email: customerEmail,
       p_middle_name: els.middleName.value.trim() || null,
       p_nickname: els.nickname.value.trim() || null,
       p_dietary_notes: els.dietaryPreferences.value.trim() || null,
@@ -369,6 +368,28 @@
       showError(registerError.message || 'Something went wrong while registering. Please try again.');
       els.submitButton.disabled = false;
       els.submitButton.textContent = 'Register';
+      return;
+    }
+
+    const { error: updateEmailError } = await supabase.rpc('update_customer', {
+      p_party_id: partyId,
+      p_first_name: values.firstName,
+      p_last_name: values.lastName,
+      p_middle_name: els.middleName.value.trim() || null,
+      p_nickname: els.nickname.value.trim() || null,
+      p_mobile_phone: values.phone,
+      p_whatsapp: values.whatsapp,
+      p_email: customerEmail,
+      p_nationality: values.nationality,
+      p_birth_date: values.birthDate,
+      p_dietary_notes: els.dietaryPreferences.value.trim() || null,
+      p_emergency_contact_name: values.emergencyName,
+      p_emergency_contact_relation: values.emergencyRelation,
+      p_emergency_contact_whatsapp: values.emergencyPhone,
+    });
+    if (updateEmailError) {
+      showError(`Your retreat registration was saved, but your email could not be updated: ${updateEmailError.message}`);
+      els.submitButton.textContent = 'Registered';
       return;
     }
 
