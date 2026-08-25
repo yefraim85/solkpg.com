@@ -55,7 +55,9 @@ export function formatPrice(price) {
 }
 
 export function normalizePhoneNumber(value) {
-  return value.trim().replace(/\s+/g, '');
+  const trimmed = value.trim();
+  const digits = trimmed.replace(/\D/g, '');
+  return trimmed.startsWith('+') ? `+${digits}` : digits;
 }
 
 // Keeps the "Same as WhatsApp number" checkbox and the phone field in sync both ways: checking it mirrors
