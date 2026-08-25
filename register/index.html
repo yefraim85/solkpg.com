@@ -45,12 +45,15 @@
 
           <div id="missingFieldsSection">
             <div id="section-personal">
-              <h2 class="section">Personal details</h2>
+              <h2 class="section">Name</h2>
 
               <div id="field-firstName">
                 <label for="firstName">First name *</label>
                 <input id="firstName" type="text" required autocomplete="given-name" />
               </div>
+
+              <label for="middleName">Middle name <span class="optional">(optional)</span></label>
+              <input id="middleName" type="text" autocomplete="additional-name" />
 
               <div id="field-lastName">
                 <label for="lastName">Last name *</label>
@@ -163,6 +166,7 @@
     retreat: document.getElementById('retreat'),
     retreatMeta: document.getElementById('retreatMeta'),
     customerEmail: document.getElementById('customerEmail'),
+    middleName: document.getElementById('middleName'),
     nationality: document.getElementById('nationality'),
     dietaryPreferences: document.getElementById('dietaryPreferences'),
     emergencyRelation: document.getElementById('emergencyRelation'),
@@ -256,6 +260,7 @@
     const { data, error } = await supabase.rpc('public_customer_details');
     existingDetails = !error && Array.isArray(data) && data.length > 0 ? data[0] : null;
     els.customerEmail.value = session.user.email || '';
+    els.middleName.value = existingDetails?.middle_name || '';
     els.dietaryPreferences.value = existingDetails?.dietary_notes || '';
 
     if (existingDetails) {
@@ -332,7 +337,7 @@
       p_emergency_contact_relation: values.emergencyRelation,
       p_emergency_contact_whatsapp: values.emergencyPhone,
       p_email: customerEmail,
-      p_middle_name: existingDetails?.middle_name || null,
+      p_middle_name: els.middleName.value.trim() || null,
       p_nickname: existingDetails?.nickname || null,
       p_dietary_notes: els.dietaryPreferences.value.trim() || null,
     });
