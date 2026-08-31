@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Retreat Registration &mdash; School of Life</title>
+<meta name="description" content="Register for a School of Life retreat in Koh Phangan, Thailand." />
+<meta name="robots" content="noindex" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="card">
+    <div id="formWrap">
+      <h1>Retreat Registration</h1>
+      <p class="subtitle">Sign in with Google to register for a retreat.</p>
+
+      <div class="gate" id="signInGate">
+        <button class="google-btn" id="signInButton" type="button">
+          <svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6.5 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.8 1.1 8 3l5.7-5.7C34.6 6.5 29.6 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.4-2.1 14.2-5.6l-6.5-5.5C29.6 34.7 26.9 36 24 36c-5.3 0-9.7-3.1-11.3-7.5l-6.6 5.1C9.6 39.6 16.3 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.5 5.5C39.9 37.4 44 31.4 44 24c0-1.3-.1-2.7-.4-3.5z"/></svg>
+          Sign in with Google
+        </button>
+      </div>
+
+      <fieldset id="formFieldset" class="hidden" disabled>
+        <div class="signed-in-row hidden" id="signedInRow">
+          <span class="email" id="signedInEmail"></span>
+          <button type="button" id="signOutButton">Sign out</button>
+        </div>
+
+        <form id="registrationForm">
+          <h2 class="section">Retreat</h2>
+          <select id="retreat" name="retreat" required>
+            <option value="" disabled selected>Loading retreats…</option>
+          </select>
+          <div class="retreat-meta" id="retreatMeta"></div>
+
+          <div class="welcome-back hidden" id="welcomeBack">
+            <p style="font-size:13.5px;color:var(--secondary);margin:0 0 4px;">
+              Welcome back, <strong id="welcomeBackName" style="color:var(--label);"></strong>.
+            </p>
+          </div>
+
+          <div id="missingFieldsSection">
+            <div id="section-name">
+              <h2 class="section">Name</h2>
+
+              <div id="field-firstName">
+                <label for="firstName">First name *</label>
+                <input id="firstName" type="text" required autocomplete="given-name" />
+              </div>
+
+              <label for="middleName">Middle name <span class="optional">(optional)</span></label>
+              <input id="middleName" type="text" autocomplete="additional-name" />
+
+              <div id="field-lastName">
+                <label for="lastName">Last name *</label>
+                <input id="lastName" type="text" required autocomplete="family-name" />
+              </div>
+
+              <label for="nickname">Nickname <span class="optional">(optional)</span></label>
+              <input id="nickname" type="text" autocomplete="nickname" />
+            </div>
+
+            <div id="section-contact">
+              <h2 class="section">Contact details</h2>
+
+              <label for="customerEmail">Email *</label>
+              <input id="customerEmail" name="email" type="email" required autocomplete="email" />
+
+              <div id="field-whatsapp">
+                <label for="whatsapp">WhatsApp number *</label>
+                <input id="whatsapp" type="tel" required autocomplete="tel" placeholder="+66 xx xxx xxxx" />
+              </div>
+
+              <div id="field-phone">
+                <label for="phone">Phone number *</label>
+                <input id="phone" type="tel" required autocomplete="tel" placeholder="+66 xx xxx xxxx" />
+                <div class="checkbox-row">
+                  <input id="samePhone" type="checkbox" />
+                  <label for="samePhone" style="margin:0;font-weight:400;">Same as WhatsApp number</label>
+                </div>
+              </div>
+            </div>
+
+            <div id="section-personal">
+              <h2 class="section">Personal details</h2>
+
+              <div id="field-nationality">
+                <label for="nationality">Nationality *</label>
+                <select id="nationality" required>
+                  <option value="" disabled selected>Select nationality…</option>
+                </select>
+              </div>
+
+              <div id="field-birthDate">
+                <label for="birthDate">Birth date *</label>
+                <input id="birthDate" type="date" required />
+              </div>
+
+              <label for="dietaryPreferences">Dietary Preferences <span class="optional">(leave empty if none)</span></label>
+              <textarea id="dietaryPreferences" rows="2"></textarea>
+            </div>
+
+            <div id="section-emergency">
+              <h2 class="section">Emergency contact details</h2>
+
+              <div id="field-emergencyName">
+                <label for="emergencyName">Name *</label>
+                <input id="emergencyName" type="text" required />
+              </div>
+
+              <div id="field-emergencyRelation">
+                <label for="emergencyRelation">Relation *</label>
+                <select id="emergencyRelation" required>
+                  <option value="" disabled selected>Select…</option>
+                </select>
+              </div>
+
+              <div id="field-emergencyPhone">
+                <label for="emergencyPhone">Number *</label>
+                <input id="emergencyPhone" type="tel" required placeholder="+66 xx xxx xxxx" />
+              </div>
+            </div>
+          </div>
+
+          <p id="editDetailsLink" class="hidden" style="margin-top:20px;">
+            <a class="link-btn" href="edit_details.html">Edit your details</a>
+          </p>
+
+          <button class="primary" type="submit" id="submitButton">Register</button>
+          <div class="error-banner" id="errorBanner"></div>
+        </form>
+      </fieldset>
+    </div>
+
+    <div class="success" id="success">
+      <div class="icon">&#10003;</div>
+      <h2 class="title">You're registered!</h2>
+      <p id="successMessage">Thanks for signing up — we'll be in touch on WhatsApp with the next steps.</p>
+    </div>
+  </div>
+
+<script type="module">
+  import {
+    SUPABASE_URL, SUPABASE_ANON_KEY, createSupabaseClient, NATIONALITIES, EMERGENCY_RELATIONS,
+    customerDetailsSaveErrorMessage, populateSelect, formatDate, normalizePhoneNumber, wireAuthGate,
+    wireSamePhoneCheckbox,
+  } from './shared.js';
+
+  const supabase = createSupabaseClient();
+
+  // Each entry maps a form field to its column in public_customer_details()'s response, so a field already on
+  // file can stay hidden while its saved value is still sent through unchanged on submit.
+  const REQUIRED_FIELDS = [
+    { id: 'firstName', key: 'first_name', section: 'section-name' },
+    { id: 'lastName', key: 'last_name', section: 'section-name' },
+    { id: 'nationality', key: 'nationality', section: 'section-personal' },
+    { id: 'birthDate', key: 'birth_date', section: 'section-personal' },
+    { id: 'whatsapp', key: 'whatsapp', section: 'section-contact' },
+    { id: 'phone', key: 'mobile_phone', section: 'section-contact' },
+    { id: 'emergencyName', key: 'emergency_contact_name', section: 'section-emergency' },
+    { id: 'emergencyRelation', key: 'emergency_contact_relation', section: 'section-emergency' },
+    { id: 'emergencyPhone', key: 'emergency_contact_whatsapp', section: 'section-emergency' },
+  ];
+  const PHONE_FIELD_IDS = new Set(['whatsapp', 'phone', 'emergencyPhone']);
+
+  const els = {
+    signInGate: document.getElementById('signInGate'),
+    signInButton: document.getElementById('signInButton'),
+    signOutButton: document.getElementById('signOutButton'),
+    signedInRow: document.getElementById('signedInRow'),
+    signedInEmail: document.getElementById('signedInEmail'),
+    formFieldset: document.getElementById('formFieldset'),
+    retreat: document.getElementById('retreat'),
+    retreatMeta: document.getElementById('retreatMeta'),
+    customerEmail: document.getElementById('customerEmail'),
+    middleName: document.getElementById('middleName'),
+    nickname: document.getElementById('nickname'),
+    nationality: document.getElementById('nationality'),
+    dietaryPreferences: document.getElementById('dietaryPreferences'),
+    emergencyRelation: document.getElementById('emergencyRelation'),
+    phone: document.getElementById('phone'),
+    whatsapp: document.getElementById('whatsapp'),
+    samePhone: document.getElementById('samePhone'),
+    form: document.getElementById('registrationForm'),
+    submitButton: document.getElementById('submitButton'),
+    errorBanner: document.getElementById('errorBanner'),
+    formWrap: document.getElementById('formWrap'),
+    success: document.getElementById('success'),
+    successMessage: document.getElementById('successMessage'),
+    welcomeBack: document.getElementById('welcomeBack'),
+    welcomeBackName: document.getElementById('welcomeBackName'),
+    missingFieldsSection: document.getElementById('missingFieldsSection'),
+    editDetailsLink: document.getElementById('editDetailsLink'),
+  };
+
+  populateSelect(els.nationality, NATIONALITIES);
+  populateSelect(els.emergencyRelation, EMERGENCY_RELATIONS);
+
+  let retreats = [];
+  let existingDetails = null;
+
+  async function loadRetreats() {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/v_public_open_retreat?select=id,name,type,start_date,price`, {
+        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+      });
+      if (!res.ok) throw new Error('Failed to load retreats');
+      retreats = await res.json();
+
+      els.retreat.innerHTML = '';
+      if (retreats.length === 0) {
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = 'No upcoming retreats open for registration';
+        opt.selected = true;
+        els.retreat.appendChild(opt);
+        els.retreat.disabled = true;
+        els.submitButton.disabled = true;
+        return;
+      }
+
+      if (retreats.length > 1) {
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = 'Select a retreat…';
+        placeholder.disabled = true;
+        placeholder.selected = true;
+        els.retreat.appendChild(placeholder);
+      }
+
+      for (const r of retreats) {
+        const opt = document.createElement('option');
+        opt.value = r.id;
+        opt.textContent = r.type ? `${r.name} - ${r.type}` : r.name;
+        els.retreat.appendChild(opt);
+      }
+      // A single option is selected by default -- nothing to choose between, so don't make the visitor pick.
+      if (retreats.length === 1) {
+        els.retreat.value = retreats[0].id;
+        els.retreat.dispatchEvent(new Event('change'));
+      }
+    } catch (err) {
+      els.retreat.innerHTML = '<option value="" disabled selected>Couldn\'t load retreats — please refresh</option>';
+      els.retreat.disabled = true;
+      els.submitButton.disabled = true;
+    }
+  }
+
+  els.retreat.addEventListener('change', () => {
+    const retreat = retreats.find((r) => r.id === els.retreat.value);
+    els.retreatMeta.textContent = retreat ? `Starts ${formatDate(retreat.start_date)}` : '';
+  });
+
+  wireSamePhoneCheckbox(els);
+
+  function showError(message) {
+    els.errorBanner.textContent = message;
+    els.errorBanner.classList.add('visible');
+  }
+  function clearError() {
+    els.errorBanner.classList.remove('visible');
+    els.errorBanner.textContent = '';
+  }
+
+  // Shows only the required fields still missing from this signed-in visitor's saved details (all of them, for
+  // someone with no record at all) -- everything already on file stays hidden here and is only reachable via the
+  // separate "Edit your details" page, so this page stays focused on retreat registration.
+  async function onSignedIn(session) {
+    const { data, error } = await supabase.rpc('public_customer_details');
+    existingDetails = !error && Array.isArray(data) && data.length > 0 ? data[0] : null;
+    els.customerEmail.value = session.user.email || '';
+    els.middleName.value = existingDetails?.middle_name || '';
+    els.nickname.value = existingDetails?.nickname || '';
+    els.dietaryPreferences.value = existingDetails?.dietary_notes || '';
+
+    if (existingDetails) {
+      els.welcomeBackName.textContent = [existingDetails.first_name, existingDetails.last_name].filter(Boolean).join(' ');
+      els.welcomeBack.classList.remove('hidden');
+      els.editDetailsLink.classList.remove('hidden');
+    } else {
+      els.welcomeBack.classList.add('hidden');
+      els.editDetailsLink.classList.add('hidden');
+    }
+
+    const sectionsWithMissing = new Set();
+    for (const field of REQUIRED_FIELDS) {
+      const value = existingDetails ? existingDetails[field.key] : null;
+      const isMissing = !value || !String(value).trim();
+      document.getElementById(`field-${field.id}`).classList.toggle('hidden', !isMissing);
+      if (isMissing) {
+        sectionsWithMissing.add(field.section);
+      }
+    }
+    for (const sectionId of ['section-emergency']) {
+      document.getElementById(sectionId).classList.toggle('hidden', !sectionsWithMissing.has(sectionId));
+    }
+    // These sections contain optional or editable fields, so they stay visible even when all required customer
+    // details are already on file.
+    document.getElementById('section-name').classList.remove('hidden');
+    document.getElementById('section-personal').classList.remove('hidden');
+    document.getElementById('section-contact').classList.remove('hidden');
+    els.missingFieldsSection.classList.remove('hidden');
+  }
+
+  const initAuthGate = wireAuthGate(supabase, els, { onSignedIn });
+
+  els.form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    clearError();
+
+    const retreatId = els.retreat.value;
+    if (!retreatId) {
+      showError('Please select a retreat.');
+      return;
+    }
+
+    const customerEmail = els.customerEmail.value.trim();
+    if (!customerEmail) {
+      showError('Please enter your email.');
+      return;
+    }
+
+    // For a field that's hidden (already on file), send its saved value through unchanged; otherwise take
+    // whatever the visitor just typed.
+    const fieldValue = (field) => {
+      const wrap = document.getElementById(`field-${field.id}`);
+      const value = !wrap.classList.contains('hidden')
+        ? document.getElementById(field.id).value
+        : existingDetails && existingDetails[field.key] ? String(existingDetails[field.key]) : '';
+      return PHONE_FIELD_IDS.has(field.id) ? normalizePhoneNumber(value) : value.trim();
+    };
+
+    const values = {};
+    for (const field of REQUIRED_FIELDS) values[field.id] = fieldValue(field);
+
+    if (Object.values(values).some((v) => !v)) {
+      showError('Please fill in all required fields.');
+      return;
+    }
+
+    els.submitButton.disabled = true;
+    els.submitButton.textContent = 'Registering…';
+
+    const { data: partyId, error: saveError } = await supabase.rpc('public_save_customer_details', {
+      p_first_name: values.firstName,
+      p_last_name: values.lastName,
+      p_whatsapp: values.whatsapp,
+      p_mobile_phone: values.phone,
+      p_nationality: values.nationality,
+      p_birth_date: values.birthDate,
+      p_emergency_contact_name: values.emergencyName,
+      p_emergency_contact_relation: values.emergencyRelation,
+      p_emergency_contact_whatsapp: values.emergencyPhone,
+      p_middle_name: els.middleName.value.trim() || null,
+      p_nickname: els.nickname.value.trim() || null,
+      p_dietary_notes: els.dietaryPreferences.value.trim() || null,
+    });
+
+    if (saveError) {
+      showError(await customerDetailsSaveErrorMessage(supabase, saveError, values.whatsapp));
+      els.submitButton.disabled = false;
+      els.submitButton.textContent = 'Register';
+      return;
+    }
+
+    const { error: registerError } = await supabase.rpc('public_register_for_retreat', { p_retreat_id: retreatId });
+    if (registerError) {
+      showError(registerError.message || 'Something went wrong while registering. Please try again.');
+      els.submitButton.disabled = false;
+      els.submitButton.textContent = 'Register';
+      return;
+    }
+
+    const { error: updateEmailError } = await supabase.rpc('update_customer', {
+      p_party_id: partyId,
+      p_first_name: values.firstName,
+      p_last_name: values.lastName,
+      p_middle_name: els.middleName.value.trim() || null,
+      p_nickname: els.nickname.value.trim() || null,
+      p_mobile_phone: values.phone,
+      p_whatsapp: values.whatsapp,
+      p_email: customerEmail,
+      p_nationality: values.nationality,
+      p_birth_date: values.birthDate,
+      p_dietary_notes: els.dietaryPreferences.value.trim() || null,
+      p_emergency_contact_name: values.emergencyName,
+      p_emergency_contact_relation: values.emergencyRelation,
+      p_emergency_contact_whatsapp: values.emergencyPhone,
+    });
+    if (updateEmailError) {
+      showError(`Your retreat registration was saved, but your email could not be updated: ${updateEmailError.message}`);
+      els.submitButton.textContent = 'Registered';
+      return;
+    }
+
+    const retreat = retreats.find((r) => r.id === retreatId);
+    els.successMessage.textContent =
+      `You're registered${retreat ? ` for ${retreat.name}` : ''} — we'll be in touch on WhatsApp with the next steps.`;
+    els.formWrap.classList.add('hidden');
+    els.success.classList.add('visible');
+  });
+
+  loadRetreats();
+  await initAuthGate();
+</script>
+</body>
+</html>
