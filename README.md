@@ -23,7 +23,7 @@ js/schedule.js    live events calendar on index.html#schedule (public Google Cal
 js/notify-404.js  pings a private ntfy.sh topic whenever a visitor hits 404.html
 bin/collect-404s.mjs   merges cached ntfy hits into a durable JSONL log (run by the Action)
 bin/404-log.mjs        views the 404 log (live ntfy cache, or the durable JSONL)
-.github/workflows/log-404s.yml   hourly cron that keeps the durable log in GitHub
+bin/log-404s.workflow.yml   the hourly-cron Action, staged here — move it into .github/workflows/ to enable
 images/           photography (team + logo are real assets; most others are stock, verified for fit)
 images/team/      real founder headshots
 images/logo/      real brand logo (logo-full.png used in nav, logo-square.png source for favicons)
@@ -45,12 +45,21 @@ Market sizing, revenue figures, and the investor/expansion pitch from the source
 
 ### Durable log in GitHub (automatic)
 
-`.github/workflows/log-404s.yml` is a scheduled GitHub Action that polls the ntfy topic hourly and appends any new hits (deduped by message id) to `logs/404-hits.jsonl`. That file is kept on a **dedicated `sol-404-log` branch**, deliberately *not* on `master`:
+A scheduled GitHub Action polls the ntfy topic hourly and appends any new hits (deduped by message id) to `logs/404-hits.jsonl`. That file is kept on a **dedicated `sol-404-log` branch**, deliberately *not* on `master`:
 
 - `master` is what Vercel deploys, so a log there would be publicly downloadable at `solkpg.com/logs/…` and would redeploy the site on every write. The data branch is an orphan branch holding only the log — nothing to serve, nothing to build.
 - The Action creates the branch on its first run; no manual setup needed.
 
-**To activate it:** merge this to `master` (scheduled workflows only run from the default branch), then optionally trigger a first run from the repo's **Actions → Log 404 hits → Run workflow**. If the push step is denied, set **Settings → Actions → General → Workflow permissions** to *Read and write*.
+**To activate it:**
+
+1. Move the staged Action into place and commit it:
+   ```
+   git mv bin/log-404s.workflow.yml .github/workflows/log-404s.yml
+   git commit -m "Enable 404-log Action"
+   ```
+   (It ships under `bin/` because the tooling that generated it can't write to `.github/workflows/`. Easiest alternative: create `.github/workflows/log-404s.yml` through GitHub's web UI, pasting the staged file's contents.)
+2. Merge to `master` — scheduled workflows only run from the default branch.
+3. Optionally trigger a first run from **Actions → Log 404 hits → Run workflow**. If the push step is denied, set **Settings → Actions → General → Workflow permissions** to *Read and write*.
 
 To read the durable log locally:
 
