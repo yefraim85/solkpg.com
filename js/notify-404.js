@@ -1,5 +1,6 @@
 // Pings a private ntfy.sh topic whenever a real visitor hits this 404 page.
 // Subscribe at https://ntfy.sh/solkpg-404-472f6470f7 (or the ntfy app) to get notified.
+// To pull the cached hits into a readable log, run bin/404-log.mjs.
 (() => {
   const topic = "solkpg-404-472f6470f7";
   const message = `Path: ${location.pathname}${location.search}\nFrom: ${document.referrer || "direct / unknown"}`;
