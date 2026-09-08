@@ -21,7 +21,9 @@ css/style.css     styling (earthy palette: forest green, sage, terracotta, sand)
 js/main.js        nav toggle, scroll-reveal, scroll-spy, smooth-scroll (desktop only)
 js/schedule.js    live events calendar on index.html#schedule (public Google Calendar API)
 js/notify-404.js  pings a private ntfy.sh topic whenever a visitor hits 404.html
-bin/404-log.mjs   pulls that ntfy topic's cached 404 hits into a readable log
+bin/collect-404s.mjs   merges cached ntfy hits into a durable JSONL log (run by the Action)
+bin/404-log.mjs        views the 404 log (live ntfy cache, or the durable JSONL)
+.github/workflows/log-404s.yml   hourly cron that keeps the durable log in GitHub
 images/           photography (team + logo are real assets; most others are stock, verified for fit)
 images/team/      real founder headshots
 images/logo/      real brand logo (logo-full.png used in nav, logo-square.png source for favicons)
@@ -39,15 +41,35 @@ Market sizing, revenue figures, and the investor/expansion pitch from the source
 
 ## 404 hit log
 
-`404.html` pings a private [ntfy.sh](https://ntfy.sh) topic (`solkpg-404-472f6470f7`) on every visit via `js/notify-404.js`. To pull those hits into a readable log on demand:
+`404.html` pings a private [ntfy.sh](https://ntfy.sh) topic (`solkpg-404-472f6470f7`) on every visit via `js/notify-404.js`, which gives real-time push notifications. But the free public ntfy.sh server only caches messages for ~12 hours, so it is not a durable record.
+
+### Durable log in GitHub (automatic)
+
+`.github/workflows/log-404s.yml` is a scheduled GitHub Action that polls the ntfy topic hourly and appends any new hits (deduped by message id) to `logs/404-hits.jsonl`. That file is kept on a **dedicated `sol-404-log` branch**, deliberately *not* on `master`:
+
+- `master` is what Vercel deploys, so a log there would be publicly downloadable at `solkpg.com/logs/…` and would redeploy the site on every write. The data branch is an orphan branch holding only the log — nothing to serve, nothing to build.
+- The Action creates the branch on its first run; no manual setup needed.
+
+**To activate it:** merge this to `master` (scheduled workflows only run from the default branch), then optionally trigger a first run from the repo's **Actions → Log 404 hits → Run workflow**. If the push step is denied, set **Settings → Actions → General → Workflow permissions** to *Read and write*.
+
+To read the durable log locally:
 
 ```
-bin/404-log.mjs            # everything ntfy still has cached
+git show sol-404-log:logs/404-hits.jsonl > 404-hits.jsonl
+bin/404-log.mjs --file 404-hits.jsonl
+```
+
+### Live check (ad-hoc)
+
+For a quick look at whatever ntfy still has cached, without the durable log:
+
+```
+bin/404-log.mjs            # everything ntfy still has cached (~12h)
 bin/404-log.mjs 24h        # last 24 hours only (also: 30m, 2h, 7d)
-bin/404-log.mjs --json     # raw message objects, one JSON per line
+bin/404-log.mjs --json     # raw ntfy message objects, one JSON per line
 ```
 
-Needs Node 18+ (built-in `fetch`), no dependencies. The free public ntfy.sh server only caches messages for about 12 hours, so this is a rolling recent log rather than a full archive — to keep long-term history, pipe it somewhere (`bin/404-log.mjs >> 404-hits.log`) or run it on a schedule (e.g. an hourly cron).
+All scripts need Node 18+ (built-in `fetch`) and no dependencies.
 
 ## Deploy
 
