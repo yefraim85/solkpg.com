@@ -20,10 +20,7 @@ schedule.html     thin redirect to index.html#schedule (kept for old links/bookm
 css/style.css     styling (earthy palette: forest green, sage, terracotta, sand)
 js/main.js        nav toggle, scroll-reveal, scroll-spy, smooth-scroll (desktop only)
 js/schedule.js    live events calendar on index.html#schedule (public Google Calendar API)
-js/notify-404.js  pings a private ntfy.sh topic whenever a visitor hits 404.html
-bin/collect-404s.mjs   merges cached ntfy hits into a durable JSONL log (run by the Action)
-bin/404-log.mjs        views the 404 log (live ntfy cache, or the durable JSONL)
-bin/log-404s.workflow.yml   the hourly-cron Action, staged here — move it into .github/workflows/ to enable
+js/notify-404.js  on a 404: pings ntfy (instant alert) + fires a Vercel Analytics "404" event
 images/           photography (team + logo are real assets; most others are stock, verified for fit)
 images/team/      real founder headshots
 images/logo/      real brand logo (logo-full.png used in nav, logo-square.png source for favicons)
@@ -39,46 +36,14 @@ robots.txt, sitemap.xml
 
 Market sizing, revenue figures, and the investor/expansion pitch from the source documents are deliberately left out — this site is for prospective residents and retreat guests, not investors.
 
-## 404 hit log
+## 404 tracking
 
-`404.html` pings a private [ntfy.sh](https://ntfy.sh) topic (`solkpg-404-472f6470f7`) on every visit via `js/notify-404.js`, which gives real-time push notifications. But the free public ntfy.sh server only caches messages for ~12 hours, so it is not a durable record.
+When a visitor hits a broken link, `404.html` loads and `js/notify-404.js` records it two ways:
 
-### Durable log in GitHub (automatic)
+- **Instant alert** — a ping to a private [ntfy.sh](https://ntfy.sh) topic (`solkpg-404-472f6470f7`); subscribe in the ntfy app to get a push the moment a dead link is followed. ntfy only caches ~12h, so it is the *alert*, not the record.
+- **Durable record** — a Vercel **Web Analytics** `404` custom event carrying the bad `path` and `referrer`. Web Analytics is enabled on the project; the analytics script is loaded site-wide from `/_vercel/insights/script.js`, and the event is queued via the `window.va` shim so it fires even before the script finishes loading.
 
-A scheduled GitHub Action polls the ntfy topic hourly and appends any new hits (deduped by message id) to `logs/404-hits.jsonl`. That file is kept on a **dedicated `sol-404-log` branch**, deliberately *not* on `master`:
-
-- `master` is what Vercel deploys, so a log there would be publicly downloadable at `solkpg.com/logs/…` and would redeploy the site on every write. The data branch is an orphan branch holding only the log — nothing to serve, nothing to build.
-- The Action creates the branch on its first run; no manual setup needed.
-
-**To activate it:**
-
-1. Move the staged Action into place and commit it:
-   ```
-   git mv bin/log-404s.workflow.yml .github/workflows/log-404s.yml
-   git commit -m "Enable 404-log Action"
-   ```
-   (It ships under `bin/` because the tooling that generated it can't write to `.github/workflows/`. Easiest alternative: create `.github/workflows/log-404s.yml` through GitHub's web UI, pasting the staged file's contents.)
-2. Merge to `master` — scheduled workflows only run from the default branch.
-3. Optionally trigger a first run from **Actions → Log 404 hits → Run workflow**. If the push step is denied, set **Settings → Actions → General → Workflow permissions** to *Read and write*.
-
-To read the durable log locally:
-
-```
-git show sol-404-log:logs/404-hits.jsonl > 404-hits.jsonl
-bin/404-log.mjs --file 404-hits.jsonl
-```
-
-### Live check (ad-hoc)
-
-For a quick look at whatever ntfy still has cached, without the durable log:
-
-```
-bin/404-log.mjs            # everything ntfy still has cached (~12h)
-bin/404-log.mjs 24h        # last 24 hours only (also: 30m, 2h, 7d)
-bin/404-log.mjs --json     # raw ntfy message objects, one JSON per line
-```
-
-All scripts need Node 18+ (built-in `fetch`) and no dependencies.
+To see the broken links, open the project's **Analytics → Events** in Vercel and filter to `eventName = 404`, or group by `eventData/path` and `referrerHostname` to rank which links break and where visitors come from. (The same data is queryable through Vercel's Web Analytics API/MCP, so it can be pulled and summarized on demand.)
 
 ## Deploy
 
