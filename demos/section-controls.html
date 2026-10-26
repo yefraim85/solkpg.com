@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Section controls — design options</title>
+<style>
+:root { color-scheme: dark; --page:#0b0b0b; --card:#131513; --preview:#0d100e; --text:#f3f5f1; --muted:#9ca59c; --border:#2b332d; --section:#243128; --hover:#304135; --accent:#c3d4ad; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--page); color:var(--text); font:14px/1.5 system-ui,sans-serif; }
+body.light { color-scheme:light; --page:#f5f6f2; --card:#fff; --preview:#fafbf8; --text:#242b24; --muted:#657060; --border:#dce2d7; --section:#edf3ee; --hover:#e2ebe4; --accent:#476139; }
+main { max-width:1120px; margin:auto; padding:44px 24px; }
+.topline { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:28px; }
+.eyebrow { color:var(--accent); font-size:11px; font-weight:650; letter-spacing:.14em; text-transform:uppercase; }
+h1 { font-size:clamp(26px,4vw,36px); letter-spacing:-.04em; line-height:1.15; margin:0 0 12px; }
+.intro { color:var(--muted); max-width:650px; margin:0 0 30px; }
+.grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; align-items:start; }
+.demo { min-width:0; border:1px solid var(--border); border-radius:14px; background:var(--card); padding:22px; }
+.option-header, .option-header>div { display:flex; align-items:center; gap:10px; }
+.option-header { justify-content:space-between; }
+.number { color:var(--muted); font-size:11px; font-variant-numeric:tabular-nums; }
+h2 { font-size:16px; margin:0; font-weight:600; }
+.badge { color:var(--accent); font-size:10px; border:1px solid var(--border); border-radius:20px; padding:3px 8px; white-space:nowrap; }
+.description { color:var(--muted); font-size:12px; margin:10px 0 20px; min-height:36px; }
+.preview { background:var(--preview); padding:18px; border:1px solid var(--border); border-radius:10px; }
+.preview-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:18px; min-height:30px; }
+h3 { font-size:16px; letter-spacing:-.02em; margin:0; }
+.controls { display:flex; align-items:center; gap:4px; }
+button { font:inherit; cursor:pointer; color:var(--muted); border:0; background:transparent; display:inline-flex; justify-content:center; align-items:center; gap:6px; min-height:28px; border-radius:5px; padding:4px 8px; font-size:11px; }
+button:hover { color:var(--text); background:var(--hover); }
+button:focus-visible, summary:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.icon-button { width:28px; padding:0; position:relative; }
+.icon-button::after { content:attr(aria-label); position:absolute; bottom:calc(100% + 8px); right:0; color:var(--text); background:var(--card); border:1px solid var(--border); border-radius:5px; padding:4px 8px; white-space:nowrap; opacity:0; pointer-events:none; z-index:1; }
+.icon-button:hover::after, .icon-button:focus-visible::after { opacity:1; }
+.text-button { padding:4px; }
+.divider { color:var(--border); font-size:11px; }
+.toggle-button { border:1px solid var(--border); padding:4px 8px; }
+.segmented { display:flex; border:1px solid var(--border); border-radius:6px; }
+.segmented button { border-radius:0; }
+.segmented button+button { border-left:1px solid var(--border); }
+.segmented button:first-child { border-radius:5px 0 0 5px; }
+.segmented button:last-child { border-radius:0 5px 5px 0; }
+.sections { display:grid; gap:8px; }
+details { border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+summary { display:flex; justify-content:space-between; align-items:center; padding:10px 12px; background:var(--section); cursor:pointer; list-style:none; font-size:12px; }
+summary::-webkit-details-marker { display:none; }
+summary::after { content:''; width:5px; height:5px; border-right:1px solid var(--muted); border-bottom:1px solid var(--muted); transform:rotate(45deg); margin-left:10px; }
+details[open] summary::after { transform:rotate(225deg); }
+ul { list-style:none; margin:0; padding:8px 12px; }
+li { color:var(--muted); padding:7px 0; font-size:11px; }
+.theme-button { border:1px solid var(--border); padding:6px 10px; }
+footer { color:var(--muted); margin-top:24px; font-size:12px; }
+@media(max-width:760px) { .grid { grid-template-columns:minmax(0,1fr); } main { padding:24px 16px; } .demo { padding:18px; } .description { min-height:0; } }
+</style>
+</head>
+<body>
+<main>
+<div class="topline"><span class="eyebrow">School of Life / Interface study</span><button class="theme-button" type="button" id="theme" aria-pressed="false">Light preview</button></div>
+<h1>A quieter way to open everything.</h1>
+<p class="intro">Four alternatives for the links page. Try each control, or open individual sections to see how it behaves. Each example works independently.</p>
+<div class="grid"><article class="demo" aria-labelledby="option-01">
+  <header class="option-header"><div><span class="number">01</span><h2 id="option-01">Icon pair</h2></div><span class="badge">Quietest</span></header>
+  <p class="description">Two small icons. Labels appear on hover or keyboard focus.</p>
+  <div class="preview"><div class="preview-heading"><h3>Useful links</h3><div class="controls" role="group" aria-label="Icon pair section controls"><button type="button" class="icon-button" data-action="expand" aria-label="Expand all sections" title="Expand all sections"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg></button><button type="button" class="icon-button" data-action="collapse" aria-label="Collapse all sections" title="Collapse all sections"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 4 5 5 5-5"/><path d="m7 20 5-5 5 5"/></svg></button></div></div><div class="sections">
+  <details><summary>Architectural Plans</summary><ul><li>3D Images</li><li>Colored Layout</li><li>Drawings</li></ul></details>
+  <details><summary>BOI</summary><ul><li>BOI Presentation</li><li>BOI Spreadsheet</li></ul></details>
+  <details><summary>Finance</summary><ul><li>Financial Plan Spreadsheet</li><li>Financial Plan App</li></ul></details>
+</div></div>
+</article>
+<article class="demo" aria-labelledby="option-02">
+  <header class="option-header"><div><span class="number">02</span><h2 id="option-02">Text links</h2></div><span class="badge">Clearest</span></header>
+  <p class="description">Small text makes both actions easy to find.</p>
+  <div class="preview"><div class="preview-heading"><h3>Useful links</h3><div class="controls" role="group" aria-label="Text links section controls"><button type="button" class="text-button" data-action="expand">Expand all</button><span class="divider" aria-hidden="true">/</span><button type="button" class="text-button" data-action="collapse">Collapse all</button></div></div><div class="sections">
+  <details><summary>Architectural Plans</summary><ul><li>3D Images</li><li>Colored Layout</li><li>Drawings</li></ul></details>
+  <details><summary>BOI</summary><ul><li>BOI Presentation</li><li>BOI Spreadsheet</li></ul></details>
+  <details><summary>Finance</summary><ul><li>Financial Plan Spreadsheet</li><li>Financial Plan App</li></ul></details>
+</div></div>
+</article>
+<article class="demo" aria-labelledby="option-03">
+  <header class="option-header"><div><span class="number">03</span><h2 id="option-03">Single toggle</h2></div><span class="badge">Recommended</span></header>
+  <p class="description">One compact action that changes with the sections.</p>
+  <div class="preview"><div class="preview-heading"><h3>Useful links</h3><div class="controls" role="group" aria-label="Single toggle section controls"><button type="button" class="toggle-button" data-action="toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg><span>Expand all</span></button></div></div><div class="sections">
+  <details><summary>Architectural Plans</summary><ul><li>3D Images</li><li>Colored Layout</li><li>Drawings</li></ul></details>
+  <details><summary>BOI</summary><ul><li>BOI Presentation</li><li>BOI Spreadsheet</li></ul></details>
+  <details><summary>Finance</summary><ul><li>Financial Plan Spreadsheet</li><li>Financial Plan App</li></ul></details>
+</div></div>
+</article>
+<article class="demo" aria-labelledby="option-04">
+  <header class="option-header"><div><span class="number">04</span><h2 id="option-04">Segmented pair</h2></div><span class="badge">Balanced</span></header>
+  <p class="description">A subtle outline groups the two explicit actions.</p>
+  <div class="preview"><div class="preview-heading"><h3>Useful links</h3><div class="controls" role="group" aria-label="Segmented pair section controls"><div class="segmented"><button type="button" class="" data-action="expand" aria-label="Expand all sections" title="Expand all sections"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg><span>Expand</span></button><button type="button" class="" data-action="collapse" aria-label="Collapse all sections" title="Collapse all sections"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 4 5 5 5-5"/><path d="m7 20 5-5 5 5"/></svg><span>Collapse</span></button></div></div></div><div class="sections">
+  <details><summary>Architectural Plans</summary><ul><li>3D Images</li><li>Colored Layout</li><li>Drawings</li></ul></details>
+  <details><summary>BOI</summary><ul><li>BOI Presentation</li><li>BOI Spreadsheet</li></ul></details>
+  <details><summary>Finance</summary><ul><li>Financial Plan Spreadsheet</li><li>Financial Plan App</li></ul></details>
+</div></div>
+</article></div>
+<footer>All examples start collapsed. These are design previews; the live links page is unchanged.</footer>
+</main>
+<script>
+const expandIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>';
+const collapseIcon = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 4 5 5 5-5"/><path d="m7 20 5-5 5 5"/></svg>';
+for (const demo of document.querySelectorAll('.demo')) {
+  const sections = [...demo.querySelectorAll('details')];
+  const toggle = demo.querySelector('[data-action="toggle"]');
+  const syncToggle = () => {
+    if (!toggle) return;
+    const allOpen = sections.every(section => section.open);
+    toggle.innerHTML = (allOpen ? collapseIcon : expandIcon) + '<span>' + (allOpen ? 'Collapse all' : 'Expand all') + '</span>';
+    toggle.setAttribute('aria-label', allOpen ? 'Collapse all sections' : 'Expand all sections');
+  };
+  for (const button of demo.querySelectorAll('[data-action]')) {
+    button.addEventListener('click', () => {
+      const action = button.dataset.action;
+      const shouldOpen = action === 'expand' || (action === 'toggle' && !sections.every(section => section.open));
+      sections.forEach(section => { section.open = shouldOpen; });
+      syncToggle();
+    });
+  }
+  sections.forEach(section => section.addEventListener('toggle', syncToggle));
+  syncToggle();
+}
+const theme = document.querySelector('#theme');
+theme.addEventListener('click', () => {
+  const light = document.body.classList.toggle('light');
+  theme.textContent = light ? 'Dark preview' : 'Light preview';
+  theme.setAttribute('aria-pressed', String(light));
+});
+</script>
+</body>
+</html>
