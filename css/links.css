@@ -120,13 +120,12 @@
 }
 .resource-sections {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   align-items: start;
   gap: 12px;
   margin-top: 32px;
 }
 .resource-sections > .resource-list {
-  grid-column: 1 / -1;
   margin-top: 0;
 }
 .resource-list {
@@ -233,9 +232,6 @@
 }
 
 @media (max-width: 640px) {
-  .resource-sections {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .links-main {
     padding: 32px 16px;
   }
