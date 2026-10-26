@@ -82,6 +82,39 @@
   font-size: 30px;
   font-weight: 700;
 }
+.links-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.collection-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.collection-actions[hidden] {
+  display: none;
+}
+.collection-actions button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--links-border);
+  border-radius: 8px;
+  background: var(--links-card);
+  color: var(--links-text);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.collection-actions button:hover {
+  background: var(--links-section);
+}
+.collection-actions button:focus-visible {
+  outline: 2px solid var(--links-accent);
+  outline-offset: 3px;
+}
 .resource-sections {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

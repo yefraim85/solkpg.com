@@ -77,7 +77,13 @@
       </button>
     </header>
     <main class="links-main">
-      <h1>Useful links</h1>
+      <div class="links-heading">
+        <h1>Useful links</h1>
+        <div class="collection-actions" role="group" aria-label="Section controls" hidden>
+          <button type="button" id="expandAll">Expand all</button>
+          <button type="button" id="collapseAll">Collapse all</button>
+        </div>
+      </div>
       <div class="resource-sections">
         <ul class="resource-list">
           <li>
@@ -133,7 +139,7 @@
             ></a>
           </li>
         </ul>
-        <details class="resource-collection">
+        <details class="resource-collection" open>
           <summary>
             <span>Architectural Plans</span
             ><svg
@@ -361,7 +367,7 @@
             </ul>
           </div>
         </details>
-        <details class="resource-collection">
+        <details class="resource-collection" open>
           <summary>
             <span>BOI</span
             ><svg
@@ -488,7 +494,7 @@
             </ul>
           </div>
         </details>
-        <details class="resource-collection">
+        <details class="resource-collection" open>
           <summary>
             <span>Finance</span
             ><svg
@@ -608,7 +614,7 @@
             </ul>
           </div>
         </details>
-        <details class="resource-collection">
+        <details class="resource-collection" open>
           <summary>
             <span>Investors Kit</span
             ><svg
@@ -785,7 +791,7 @@
             </ul>
           </div>
         </details>
-        <details class="resource-collection">
+        <details class="resource-collection" open>
           <summary>
             <span>Land Plots</span
             ><svg
