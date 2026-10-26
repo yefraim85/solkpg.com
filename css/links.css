@@ -92,24 +92,27 @@
 .collection-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 4px;
 }
 .collection-actions[hidden] {
   display: none;
 }
 .collection-actions button {
-  min-height: 44px;
-  padding: 8px 12px;
-  border: 1px solid var(--links-border);
-  border-radius: 8px;
-  background: var(--links-card);
-  color: var(--links-text);
-  font: inherit;
-  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--links-muted);
   cursor: pointer;
 }
 .collection-actions button:hover {
   background: var(--links-section);
+  color: var(--links-text);
 }
 .collection-actions button:focus-visible {
   outline: 2px solid var(--links-accent);
