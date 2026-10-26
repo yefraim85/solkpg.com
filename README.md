@@ -16,4 +16,4 @@ Auto-deploys to Vercel on push to `master`.
 
 The public useful-links page is at `/links/`. Edit the references in `links/index.html`; its compact layout is in `css/links.css`. SVG icons are from Lucide (license in `links/icons-LICENSE.txt`).
 
-When changing `css/links.css`, update its `?v=` value in `links/index.html` to the first 12 characters of the stylesheet’s SHA-256 hash so browsers fetch the new styles.
+When changing `css/links.css` or `js/links.js`, update its `?v=` value in `links/index.html` to the first 12 characters of the file’s SHA-256 hash so browsers fetch the updated asset.

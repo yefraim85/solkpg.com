@@ -11,18 +11,26 @@ themeToggle.addEventListener("click", () => {
   setDarkMode(!document.body.classList.contains("is-dark"));
 });
 
-const resourceSections = document.querySelectorAll(".resource-collection");
+const resourceSections = [...document.querySelectorAll(".resource-collection")];
+const collectionToggle = document.querySelector(".collection-toggle");
+const collectionToggleLabel = collectionToggle.querySelector("span");
 
-document.querySelector("#expandAll").addEventListener("click", () => {
+const syncCollectionToggle = () => {
+  const allOpen = resourceSections.every((section) => section.open);
+  collectionToggle.setAttribute("aria-expanded", String(allOpen));
+  collectionToggleLabel.textContent = allOpen ? "Collapse all" : "Expand all";
+};
+
+collectionToggle.addEventListener("click", () => {
+  const shouldOpen = !resourceSections.every((section) => section.open);
   resourceSections.forEach((section) => {
-    section.open = true;
+    section.open = shouldOpen;
   });
+  syncCollectionToggle();
 });
 
-document.querySelector("#collapseAll").addEventListener("click", () => {
-  resourceSections.forEach((section) => {
-    section.open = false;
-  });
+resourceSections.forEach((section) => {
+  section.addEventListener("toggle", syncCollectionToggle);
 });
-
-document.querySelector(".collection-actions").hidden = false;
+syncCollectionToggle();
+collectionToggle.hidden = false;
